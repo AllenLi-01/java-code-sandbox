@@ -19,6 +19,7 @@ import com.xinn.bojcodesandbox.model.ExecuteMessage;
 import com.xinn.bojcodesandbox.model.JudgeInfo;
 import com.xinn.bojcodesandbox.utils.ProcessUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import java.io.*;
@@ -26,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+@Component
 @Slf4j
 public class JavaDockerCodeSandbox implements CodeSandBox {
 
@@ -240,7 +242,7 @@ public class JavaDockerCodeSandbox implements CodeSandBox {
                         .exec(execStartResultCallback)
                         .awaitCompletion(TIME_OUT, TimeUnit.SECONDS);
                 stopWatch.stop();
-//                Thread.sleep(500);
+                Thread.sleep(300);
                 statisticsResultCallback.close();
 
                 time = stopWatch.getLastTaskTimeMillis();
@@ -252,6 +254,13 @@ public class JavaDockerCodeSandbox implements CodeSandBox {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            //去除末尾换行符
+            if (message.length() > 0) {
+                if (message.substring(message.length() - 1).equals("\n")) {
+                    message.setLength(message.length() - 1);
+                }
+            }
+
             executeMessage.setMessage(message.toString());
             executeMessage.setErrorMessage(errorMessage.toString());
             executeMessage.setTime(time);
@@ -260,16 +269,10 @@ public class JavaDockerCodeSandbox implements CodeSandBox {
             if(time>5000){
                 break;
             }
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-
         }
 
 
-        // 4、封装结果，跟原生实现方式完全一致
+        // 4、封装结果
         ExecuteCodeResponse executeCodeResponse = new ExecuteCodeResponse();
         List<String> outputList = new ArrayList<>();
         // 取用时最大值，便于判断是否超时
