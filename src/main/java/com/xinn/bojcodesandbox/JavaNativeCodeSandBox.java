@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 public class JavaNativeCodeSandBox implements CodeSandBox {
     private static final String CODE_PATH = "tempCode";
-    private static final String JAVA_CLASS_NAME = "Main.java";
+    private static final String JAVA_CLASS_NAME = "Main.java.java";
     private static final long MAX_EXECUTE_TIME = 10000L;
     private static final List<String> BLACK_LIST = Arrays.asList("java.io.File","java.nio"," .net");
     private static final WordTree WORD_TREE;
@@ -77,7 +77,7 @@ public class JavaNativeCodeSandBox implements CodeSandBox {
 
         List<ExecuteMessage> executeMessageList = new ArrayList<>();
         for(String input:inputList){
-            String runCmd = String.format("java -Xmx1024m -cp %s Main %s",userCodeParentPath,input);
+            String runCmd = String.format("java -Xmx1024m -cp %s Main.java %s",userCodeParentPath,input);
 
             try {
                 Process process = Runtime.getRuntime().exec(runCmd);

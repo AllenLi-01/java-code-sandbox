@@ -3,6 +3,8 @@
  */
 public class Main {
     public static void main(String[] args) throws Exception{
-        Thread.sleep(60 * 60 * 1000L);
+        while (true){
+            Thread.sleep(1000L);
+        }
     }
 }

@@ -45,6 +45,7 @@ public class ProcessUtils {
                 }
 
                 message.setErrorMessage(errorOutput.toString());
+                System.out.println("错误输出："+message.getErrorMessage());
             }
 
         } catch (InterruptedException | IOException e) {
